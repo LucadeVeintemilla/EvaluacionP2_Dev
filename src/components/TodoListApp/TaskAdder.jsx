@@ -1,12 +1,9 @@
 import axios from "axios";
 import React, { Component } from "react";
-import DOMPurify from "dompurify";
 import "./TaskAdder.css";
-import validator from "validator";
 
 class TaskAdder extends Component {
   state = { taskInput: "" };
-
   //event handler
   onFilterChange = (event) => {
     this.props.onFilterChange(event.target.value);
@@ -14,32 +11,22 @@ class TaskAdder extends Component {
 
   onFormSubmit = async (event) => {
     event.preventDefault();
-
-    // Validation for input
     if (this.state.taskInput === "") {
-      return alert("Nothing has been submitted!");
+      return alert("Nothing has been submited!");
     }
-
-    if (!validator.isAlphanumeric(this.state.taskInput.replace(/ /g, ''))) {
-      return alert("Task input contains invalid characters!");
-    }
-
-    // Sanitize the task input
-    const sanitizedTaskInput = DOMPurify.sanitize(this.state.taskInput);
-
-    // Add the sanitized task input to the server
+    //in function fqt todo hayi ke jadide az server migire va ezafe mikone
     try {
       const addingTodoData = await axios.post(
         "http://localhost:8000/api/v1/todos/",
         {
-          // To server
+          //to server
           name: "todos",
-          TodoText: sanitizedTaskInput,
+          TodoText: this.state.taskInput,
           isChecked: false,
         },
         {
           headers: {
-            Authorization: `Bearer ${this.props.token}`, // Means the header has token
+            Authorization: `Bearer ${this.props.token}`, //means the header have token
           },
         }
       );
@@ -47,8 +34,8 @@ class TaskAdder extends Component {
       this.props.onSubmit([
         ...this.props.todos,
         {
-          // Not going to server
-          TodoText: sanitizedTaskInput,
+          //not going to server
+          TodoText: this.state.taskInput,
           isChecked: false,
           _id: addingTodoData.data.data._id,
         },
@@ -89,5 +76,4 @@ class TaskAdder extends Component {
     );
   }
 }
-
 export default TaskAdder;

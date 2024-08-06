@@ -1,7 +1,6 @@
 import React from "react";
 import "./Todo.css";
 import axios from "axios";
-import DOMPurify from "dompurify";
 
 class Todo extends React.Component {
   deleteHandler = async () => {
@@ -56,16 +55,14 @@ class Todo extends React.Component {
       console.log(error.response);
     }
   };
-
   render() {
     const { todo } = this.props;
-    const sanitizedTodoText = DOMPurify.sanitize(todo.TodoText);
     return (
       <div className="todo-list">
         <ul>
           <li>
             <span className={`task-name ${todo.isChecked ? "completed" : ""}`}>
-              {sanitizedTodoText}
+              {todo.TodoText}
             </span>
             <span>
               <button className="complete-btn" onClick={this.completeHandler}>
