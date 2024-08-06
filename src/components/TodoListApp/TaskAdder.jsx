@@ -4,7 +4,7 @@ import "./TaskAdder.css";
 
 class TaskAdder extends Component {
   state = { taskInput: "" };
-  //event handler
+
   onFilterChange = (event) => {
     this.props.onFilterChange(event.target.value);
   };
@@ -14,19 +14,18 @@ class TaskAdder extends Component {
     if (this.state.taskInput === "") {
       return alert("Nothing has been submited!");
     }
-    //in function fqt todo hayi ke jadide az server migire va ezafe mikone
+
     try {
       const addingTodoData = await axios.post(
         "http://localhost:8000/api/v1/todos/",
         {
-          //to server
           name: "todos",
           TodoText: this.state.taskInput,
           isChecked: false,
         },
         {
           headers: {
-            Authorization: `Bearer ${this.props.token}`, //means the header have token
+            Authorization: `Bearer ${this.props.token}`,
           },
         }
       );
@@ -34,7 +33,6 @@ class TaskAdder extends Component {
       this.props.onSubmit([
         ...this.props.todos,
         {
-          //not going to server
           TodoText: this.state.taskInput,
           isChecked: false,
           _id: addingTodoData.data.data._id,
@@ -50,7 +48,7 @@ class TaskAdder extends Component {
     return (
       <div className="todo-container">
         <h1 className="title">Your Todo List</h1>
-        <form className="add-form" action="" onSubmit={this.onFormSubmit}>
+        <form className="add-form" action="" onSubmit={this.onFormSubmit} role="form">
           <input
             onChange={(e) => this.setState({ taskInput: e.target.value })}
             placeholder="add task to do"
@@ -60,20 +58,13 @@ class TaskAdder extends Component {
           <button type="submit">
             <i className="fas fa-plus"></i>
           </button>
-          <div className="filter-bar">
-            <i className="fas fa-sort-down"></i>
-            <select
-              onChange={this.onFilterChange}
-              value={this.props.selectedFilter}
-            >
-              <option value="all"> All</option>
-              <option value="finished"> Finished</option>
-              <option value="unfinished"> Unfinished</option>
-            </select>
-          </div>
+          <div className="filter-bar"></div>
         </form>
       </div>
     );
   }
 }
+
+
+
 export default TaskAdder;

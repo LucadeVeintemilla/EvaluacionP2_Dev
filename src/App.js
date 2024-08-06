@@ -4,36 +4,37 @@ import Nav from './components/Nav';
 import AuthPage from './pages/AuthPage';
 import TodoListPage from './pages/TodoListPage';
 import HomePage from './pages/HomePage';
+import FilterPage from './pages/FilterPage'; // Importa FilterPage
 import ProtectedRoute from './ProtectedRoute';
 import Cookies from 'universal-cookie';
-
 import './app.css';
 
 class App extends Component {
-  state = { isAuthenticated: false, username:'' };
+  state = { isAuthenticated: false, username: '' };
   cookie = new Cookies();
 
   authHandler = () => {
     this.setState({ isAuthenticated: true });
   };
-  
+
   componentDidMount = () => {
     const authCookie = this.cookie.get('token');
     authCookie ? this.authHandler() : this.logoutHandler();
-  }
-  
+  };
+
   logoutHandler = () => {
     this.setState({ isAuthenticated: false });
     this.cookie.remove('token');
   };
+
   usernameHandler = (term) => {
     this.setState({ username: term });
-  }
+  };
 
   render() {
     return (
       <>
-        <Nav 
+        <Nav
           isAuthenticated={this.state.isAuthenticated}
           logoutHandler={this.logoutHandler}
           username={this.state.username}
@@ -43,22 +44,25 @@ class App extends Component {
           <Route path='/auth'>
             <AuthPage
               isAuthenticated={this.state.isAuthenticated}
-              authHandler={this.authHandler} 
+              authHandler={this.authHandler}
             />
-            </Route> 
-             
+          </Route>
           <ProtectedRoute
             auth={this.state.isAuthenticated}
             path='/todolist'
           >
-             <TodoListPage usernameHandler={this.usernameHandler} /> 
+            <TodoListPage usernameHandler={this.usernameHandler} />
           </ProtectedRoute>
-          {/*age mese balayi bashe byd to ProtectedRoute ...rest ezafe koni*/}
+          <ProtectedRoute
+            auth={this.state.isAuthenticated}
+            path='/filter'
+          >
+            <FilterPage />
+          </ProtectedRoute>
         </Switch>
       </>
     );
   }
-
-};
+}
 
 export default App;

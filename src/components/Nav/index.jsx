@@ -20,6 +20,9 @@ const Nav = ({ isAuthenticated, logoutHandler, username }) => {
             <li>
               <Link to="/todolist"> Your TodoList</Link>
             </li>
+            <li>
+              <Link to="/filter"> Filter Tasks</Link>
+            </li>
           </>
         ) : (
           <li>
